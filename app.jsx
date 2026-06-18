@@ -73,18 +73,16 @@ function App() {
   const topRef = React.useRef(null);
   React.useEffect(() => { if (topRef.current) topRef.current.scrollTop = 0; }, [route]);
 
-  // Carga inicial del listado desde SQLite (GET /api/usuarios).
+  // Carga inicial del listado desde el store local (localStorage).
   function loadUsers() {
     setLoadState("loading");
-    fetch("/api/usuarios")
-      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    Store.list()
       .then((data) => { setUsers(data); setLoadState("ready"); })
       .catch(() => setLoadState("error"));
   }
-  // Conteo por estado para las tarjetas-resumen (GET /api/usuarios/stats).
+  // Conteo por estado para las tarjetas-resumen.
   function loadStats() {
-    fetch("/api/usuarios/stats")
-      .then((r) => (r.ok ? r.json() : null))
+    Store.stats()
       .then((s) => { if (s) setStats(s); })
       .catch(() => {});
   }
@@ -101,15 +99,10 @@ function App() {
   const goVer = (u) => setRoute({ name: "view", user: u });
   const goEditar = (u) => setRoute({ name: "edit", user: u });
 
-  // Persiste la edición en SQLite (PUT /api/usuarios/<id>).
+  // Persiste la edición en el store local (localStorage).
   // Devuelve una promesa para que la pantalla de edición reaccione al fallo.
   function onSaved(form) {
-    return fetch(`/api/usuarios/${encodeURIComponent(form.id)}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    })
-      .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    return Store.update(form.id, form)
       .then((updated) => {
         setUsers((us) => us.map((u) => (u.id === updated.id ? updated : u)));
         loadStats(); // refresca el conteo de las tarjetas tras el cambio de estado

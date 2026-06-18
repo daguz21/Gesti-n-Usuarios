@@ -1,11 +1,34 @@
 # Gestión de Usuarios — Core Daguz (prototipo navegable)
 
 Implementación del módulo **Gestión de usuarios** a partir del diseño de Claude Design
-(proyecto "Pruebas QA 2"). El front es React + Babel vía CDN (sin paso de compilación) y
-los datos se conectan a una base **SQLite** mediante un backend liviano en Python de
-librería estándar. No requiere dependencias de `npm` ni de `pip`.
+(proyecto "Pruebas QA 2"). El front es React + Babel vía CDN (sin paso de compilación).
+No requiere dependencias de `npm` ni de `pip`.
 
-## Cómo ejecutarlo
+Hay **dos formas de persistir los datos**, intercambiables:
+
+- **Estático (recomendado para desplegar)** — `store.js` siembra los 28 usuarios y guarda
+  las ediciones en `localStorage` del navegador. No necesita servidor: funciona en
+  cualquier hosting estático (**Vercel**, GitHub Pages, etc.). Es el modo activo por
+  defecto (lo carga `index.html`). Limitación: las ediciones son por navegador/equipo, no
+  se comparten entre usuarios.
+- **Backend Python + SQLite (local)** — `server.py` sirve los estáticos y una API REST
+  sobre SQLite. Útil para desarrollo local con persistencia en archivo. *(En este modo
+  habría que volver a apuntar `app.jsx` a la API en vez de a `Store`.)*
+
+## Desplegar en Vercel
+
+El proyecto ya es **100% estático**, así que el despliegue no requiere build:
+
+1. Sube el repo a GitHub (ya hecho).
+2. En [vercel.com](https://vercel.com) → **Add New… → Project** → importa el repo.
+3. **Framework Preset: Other**. Deja *Build Command* y *Output Directory* vacíos
+   (la raíz del repo es el sitio).
+4. **Deploy**. Obtendrás una URL pública accesible desde cualquier computador.
+
+> `server.py` y `usuarios.db` se ignoran en el despliegue estático; pueden quedarse en el
+> repo para uso local sin afectar a Vercel.
+
+## Cómo ejecutarlo en local (modo backend Python)
 
 El backend (`server.py`) sirve los archivos estáticos **y** la API REST en el mismo
 proceso y puerto, así que un solo comando levanta todo:
@@ -20,8 +43,9 @@ Al arrancar por primera vez crea `usuarios.db` y la siembra con los 28 usuarios 
 ejemplo. Las ediciones que confirme en la pantalla **Edición de usuarios** se guardan en
 esa base y persisten entre reinicios.
 
-> Nota: ya **no** funciona abrir `index.html` con `file://` ni con un servidor estático
-> simple: el listado se obtiene de la API (`GET /api/usuarios`).
+> Nota: en el modo estático (por defecto) el listado lo sirve `store.js` desde
+> `localStorage`. Debe servirse por **http(s)** (Vercel, `python3 -m http.server`, etc.),
+> no con `file://`, porque Babel descarga los `.jsx` por red.
 
 ## API
 
