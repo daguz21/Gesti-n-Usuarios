@@ -125,7 +125,8 @@ function App() {
 
   return (
     <div className="app">
-      <Shell.Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Shell.Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)}
+        onGestionUsuarios={() => { goList(); setSidebarOpen(false); }} />
       <div className="main" ref={topRef}>
         <Shell.Topbar crumbs={crumbs} user={currentUser} onMenu={() => setSidebarOpen(true)} />
 

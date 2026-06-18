@@ -2,7 +2,7 @@
    App shell: Sidebar + Topbar  ->  window.Shell
    ============================================================ */
 
-function Sidebar({ open, onClose }) {
+function Sidebar({ open, onClose, onGestionUsuarios }) {
   const [usuariosOpen, setUsuariosOpen] = React.useState(true);
   return (
     <>
@@ -29,7 +29,7 @@ function Sidebar({ open, onClose }) {
             </button>
             {usuariosOpen && (
               <div className="sb-sub">
-                <button className="sb-subitem active">Gestión de usuarios</button>
+                <button className="sb-subitem active" onClick={onGestionUsuarios}>Gestión de usuarios</button>
               </div>
             )}
           </div>
