@@ -30,18 +30,9 @@ function Sidebar({ open, onClose }) {
             {usuariosOpen && (
               <div className="sb-sub">
                 <button className="sb-subitem active">Gestión de usuarios</button>
-                <button className="sb-subitem">Roles y permisos</button>
-                <button className="sb-subitem">Auditoría de accesos</button>
               </div>
             )}
           </div>
-
-          <button className="sb-item"><Ico.shield className="ico" />Seguridad</button>
-          <button className="sb-item"><Ico.grid className="ico" />Parámetros</button>
-          <button className="sb-item"><Ico.file className="ico" />Reportes</button>
-
-          <div className="sb-section-label">Sistema</div>
-          <button className="sb-item"><Ico.settings className="ico" />Configuración</button>
         </nav>
 
         <div className="sb-foot">
