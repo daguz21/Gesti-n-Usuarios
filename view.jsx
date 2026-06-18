@@ -16,7 +16,10 @@ function ViewScreen({ user, onBack, onPreviewSig }) {
           <p className="page-sub">Consulta de la información del usuario en modo solo lectura.</p>
         </div>
         <div className="spacer"></div>
-        <Badge estado={user.estado} />
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <Badge estado={user.estado} />
+          <button className="btn btn-ghost" onClick={onBack}><Ico.arrowLeft className="ico" />Volver</button>
+        </div>
       </div>
 
       {/* Datos generales */}
